@@ -1,0 +1,30 @@
+---
+title: "Relational Data"
+author: "Will McClaughry"
+date: "October 29, 2017"
+output: html_document
+---
+
+#10.2.1 Excersises
+
+1. Variables needed: origin and dest from the flights table and longitude and latitude from airports table.
+
+You would merge the flights table with the airports table two times, first to get location of the origin
+
+airport then to get the location of the dest airport.
+
+2. "origin"" in weather should be matched with "faa"" in airports
+
+3. Weather variables: year, month, day, hour, and origin, matched with year, month, day, hour, and dest 
+
+from "flight".
+
+4. Make a table for the special dates. Date would be primary key. The table would need to match to the 
+
+year, month, and day columns of "flights".
+
+#10.3.1 Excersises
+
+
+
+
