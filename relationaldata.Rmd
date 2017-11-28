@@ -83,5 +83,35 @@ ggplot2::diamonds %>%
 nrow(ggplot2::diamonds)
 ```
   no primary key
-    
+  
+3.
+```{r}
+airports %>%
+  semi_join(flights, c("faa" = "dest")) %>%
+  ggplot(aes(lon, lat)) + borders("state") + geom_point() + coord_quickmap()
+```
 
+4. 
+```{r}
+flights %>%
+  left_join(airports, by = c(dest = "faa")) %>%
+  left_join(airports, by = c(origin = "faa")) %>%
+  head()
+```
+
+5.
+```{r}
+plane_ages <- 
+  planes %>%
+  mutate(age = 2013 - year) %>%
+  select(tailnum, age)
+
+flights %>%
+  inner_join(plane_ages, by = "tailnum") %>%
+  group_by(age) %>%
+  filter(!is.na(dep_delay)) %>%
+  summarise(delay = mean(dep_delay)) %>%
+  ggplot(aes(x = age, y = delay)) + geom_point() + geom_line()
+```
+
+No there is no relationship between plane age and delays
