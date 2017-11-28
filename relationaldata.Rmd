@@ -84,14 +84,16 @@ nrow(ggplot2::diamonds)
 ```
   no primary key
   
-3.
+#10.4.6 Excersises  
+  
+1.
 ```{r}
 airports %>%
   semi_join(flights, c("faa" = "dest")) %>%
   ggplot(aes(lon, lat)) + borders("state") + geom_point() + coord_quickmap()
 ```
 
-4. 
+2. 
 ```{r}
 flights %>%
   left_join(airports, by = c(dest = "faa")) %>%
@@ -99,7 +101,7 @@ flights %>%
   head()
 ```
 
-5.
+3.
 ```{r}
 plane_ages <- 
   planes %>%
@@ -115,3 +117,82 @@ flights %>%
 ```
 
 No there is no relationship between plane age and delays
+
+4.
+```{r}
+flight_weather <-
+  flights %>%
+  inner_join(weather, by = c("origin" = "origin",
+                            "year" = "year",
+                            "month" = "month",
+                            "day" = "day",
+                            "hour" = "hour"))
+flight_weather %>%
+  group_by(precip) %>%
+  summarise(delay = mean(dep_delay, na.rm = TRUE)) %>%
+  ggplot(aes(x = precip, y = delay)) + geom_line() + geom_point()
+```
+Precipitation increases the chance for a delay
+
+5. 
+```{r}
+flights %>%
+  filter(year == 2013, month == 6, day == 13) %>%
+  group_by(dest) %>%
+  summarise(delay = mean(arr_delay, na.rm = TRUE)) %>%
+  inner_join(airports, by = c("dest" = "faa")) %>%
+  ggplot(aes(y = lat, x = lon, size = delay, colour = delay)) +
+  borders("state") +
+  geom_point() +
+  coord_quickmap() + 
+  scale_color_viridis()
+```
+There were a lot of storms with high winds in the Southeast
+
+#10.5.1 Excercises
+1.
+```{r}
+flights %>%
+  anti_join(planes, by = "tailnum") %>%
+  count(carrier, sort = TRUE)
+```
+The ones with missing tail numbers are AA and MQ, American Airlines and Envoy Airlines
+
+2.
+```{r}
+planes_gt100 <- 
+  filter(flights) %>%
+  group_by(tailnum) %>%
+  count() %>%
+  filter(n > 100)
+
+flights %>%
+  semi_join(planes_gt100, by = "tailnum")
+```
+
+3. 
+```{r}
+glimpse(fueleconomy::vehicles)
+glimpse(fueleconomy::common)
+fueleconomy::vehicles %>%
+  semi_join(fueleconomy::common, by = c("make", "model"))
+```
+4.
+Yeah the worst weather causes for heavy delays
+
+5.
+The FAA is the list of airport destinations. Some flights go to airports not in FAA, probably foreign 
+
+airports.
+
+```{r}
+flights %>%
+  group_by(tailnum, carrier) %>%
+  count() %>%
+  filter(n() > 1) %>%
+  select(tailnum) %>%
+  distinct()
+```
+
+I reject the hypothesis, I can't find any relationship with the airline and planes.
+
