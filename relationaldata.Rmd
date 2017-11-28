@@ -7,7 +7,9 @@ output: html_document
 
 #10.2.1 Excersises
 
-1. Variables needed: origin and dest from the flights table and longitude and latitude from airports table.
+1. Variables needed: origin and dest from the flights table and longitude and latitude from airports 
+
+table.
 
 You would merge the flights table with the airports table two times, first to get location of the origin
 
@@ -25,6 +27,61 @@ year, month, and day columns of "flights".
 
 #10.3.1 Excersises
 
+1.
+```{r}
+flights %>% 
+  arrange(year, month, day, sched_dep_time, carrier, flight) %>%
+  mutate(flight_id = row_number()) %>%
+  glimpse()
+```
 
+2.
 
+  1.
+```{r}
+Lahman::Batting %>%
+  group_by(playerID, yearID, stint) %>%
+  filter(n() > 1) %>%
+  nrow()
+```
+  
+The primary key for Lahman::Batting is playerID, yearID, stint
+  
+  2. 
+```{r}
+babynames::babynames %>%
+  group_by(year, sex, name) %>%
+  filter(n() > 1) %>%
+  nrow()
+```
+  
+Primary key for babynames::babynames is year, sex, name
+
+  3.
+```{r}
+nasaweather::atmos %>%
+  group_by(lat, long, year, month) %>%
+  filter(n() > 1) %>%
+  nrow()
+```
+  Primary key is nasaweather::atmo
+  
+  4.
+```{r}
+fueleconomy::vehicles %>%
+  group_by(id) %>%
+  filter(n() > 1) %>%
+  nrow()
+```
+  id is the the primary key for fueleconomy::vehicles
+  
+  5. 
+```{r}
+ggplot2::diamonds %>%
+  distinct() %>% 
+  nrow()
+nrow(ggplot2::diamonds)
+```
+  no primary key
+    
 
